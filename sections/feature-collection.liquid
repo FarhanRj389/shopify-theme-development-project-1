@@ -1,0 +1,116 @@
+{% assign featured_collection = collections[section.settings.collection] %}
+
+<style>
+    .featured-collection {
+    margin: 2rem 0;
+    padding: 2rem 1rem;
+    background-color: #f8f4f4;
+    border-radius: 8px;
+}
+
+.container .featured-collection__title {
+    font-size: {{section.settings.section_title_size}}px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.featured-collection_products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 2rem;
+    align-items: stretch;
+}
+.product-cart h2{
+    font-size: {{ section.settings.product_title_size }}px;
+}
+.product-cart p{
+    font-size: {{ section.settings.price_font_size }}px;
+}
+</style>
+
+{% if section.settings.collection != blank and featured_collection %}
+    {% if featured_collection.products_count > 0 %}
+        <section class="featured-collection">
+            <div class="container">
+                <h2 class="featured-collection__title">{{ featured_collection.title }}</h2>
+                <div class="featured-collection_products">
+                    {% for product in featured_collection.products limit: section.settings.products_to_show %}
+                        <div class="product-cart">
+                            <a href="{{ product.url }}">
+                                {% if product.featured_image %}
+                                <img src="{{ product.featured_image |  image_url: width: section.settings.product_image_size , height: section.settings.product_image_size }}" alt="{{ product.title }}">
+                                {% endif %}
+                                 <h2>{{ product.title }}</h2>
+                                <p>{{ product.price |  money }}</p>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+        </section>
+    {% endif %}
+{% else %}
+        <p>No collection selected or collection is empty</p>
+{% endif %}
+
+{% schema %}
+{
+    "name": "Featured Collection",
+    "settings": [
+            {
+                "type": "collection",
+                "id": "collection",
+                "label": "Collection"
+            },
+            {
+                "type": "number",
+                "id": "products_to_show",
+                "label": "Number of products to show",
+                "default": 4
+            },
+            {
+                "type": "range",
+                "id": "section_title_size",
+                "label": "Section Title Font Size",
+                "min": 14,
+                "max": 60,
+                "step": 1,
+                "default": 28
+            },
+            {
+                "type": "range",
+                "id": "product_title_size",
+                "label": "Product Title Font Size",
+                "min": 12,
+                "max": 30,
+                "step": 1,
+                "default": 16
+            },
+            {
+                "type": "range",
+                "id": "price_font_size",
+                "label": "Price Font Size",
+                "min": 12,
+                "max": 30,
+                "step": 1,
+                "default": 14
+            },
+            {
+                "type": "range",
+                "id": "product_image_size",
+                "label": "Product Image Size",
+                "min": 150,
+                "max": 500,
+                "step": 25,
+                "default": 300
+            }
+        ],
+        "presets": [
+            {
+                "name": "Featured Collection",
+                "category": "General"
+            }
+        ]
+}
+{% endschema %}

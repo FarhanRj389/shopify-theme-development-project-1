@@ -1,0 +1,25 @@
+{
+  "type": "header",
+  "name": "Header Group",
+  "sections": {
+    "announcement_bar_PCrQM4": {
+      "type": "announcement-bar",
+      "name": "Annoucement Bar",
+      "settings": {
+        "annoucement_text": "Welcome to Our Store!",
+        "background_color": "#000000",
+        "text_color": "#FFFFFF",
+        "padding_align": "10px",
+        "text_align": "center"
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {}
+    }
+  },
+  "order": [
+    "announcement_bar_PCrQM4",
+    "header"
+  ]
+}

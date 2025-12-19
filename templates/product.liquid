@@ -1,0 +1,17 @@
+
+<div class="product-page">
+    <div class="product-image">
+        <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title }}">
+    </div>
+    <div class="product-details">
+        <h1 class="product-title">{{ product.title }}</h1>
+        <p class="product-price">{{ product.price | money }}</p>
+        {% form 'product', product %}
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+        {% endform %}
+        <p class="product-description">
+            {{ product.description }}
+        </p>
+    </div>
+</div>

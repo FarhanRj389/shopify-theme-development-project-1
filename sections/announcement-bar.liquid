@@ -1,0 +1,75 @@
+<div class="announcement-bar"
+    style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }}; padding: {{ section.settings.padding_align }}; text-align: {{ section.settings.text_align }};">
+ {{ section.settings.annoucement_text }}
+</div>
+
+{%  schema %}
+{
+    "name": "Announcement Bar",
+    "settings": [ 
+        {
+            "type": "text",
+            "id": "annoucement_text",
+            "label": "Announcement Text",
+            "default": "Welcome to Our Store!"
+        },
+        {
+            "type": "color",
+            "id": "background_color",
+            "label": "Background Color",
+            "default": "#4e0c0c"
+        },
+        {
+            "type": "color",
+            "id": "text_color",
+            "label": "Text Color",
+            "default": "#FFFFFF"
+        },
+        {
+            "type": "select",
+            "id": "padding_align",
+            "label": "Padding",
+            "options": [
+                {
+                    "value": "10px",
+                    "label": "Small"
+                },
+                {
+                    "value": "20px",
+                    "label": "Medium"
+                },
+                {
+                    "value": "30px",
+                    "label": "Large"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "text_align",
+            "label": "Text Alignment",
+            "options": [
+                {
+                    "value": "left",
+                    "label": "Left"
+                },
+                {
+                    "value": "center",
+                    "label": "Center"
+                },
+                {
+                    "value": "right",
+                    "label": "Right"
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "Annoucement Bar",
+            "category": "Annoucement"
+        }
+    ]
+}
+
+{% endschema %} 

@@ -1,0 +1,28 @@
+<style>
+.product-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+.collection-title{
+    text-align: center;
+    margin-top: 2rem;
+}
+
+</style>
+<h1 class="collection-title">{{collection.title}}</h1>
+<div  class="container">
+    <div class="product-gird">
+        {% for product in collection.products %}
+            <div class="product-cart">
+                <a href="{{ product.url }}">
+                    {% if product.featured_image %}
+                        <img src="{{ product.featured_image | image_url: width: '400px' }}" alt="{{ product.title }}">
+                    {% endif %}
+                    <h2>{{ product.title }}</h2>
+                    <p>{{ product.price |  money }}</p>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>

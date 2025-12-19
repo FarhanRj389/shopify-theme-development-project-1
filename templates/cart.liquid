@@ -1,0 +1,213 @@
+<div class="cart-page">
+    <h1 class="cart-title">Your Cart</h1>
+    {% if cart.item_count == 0 %}
+        <p class="cart-empty-message">Your cart is currently empty</p>
+        <div class="cart-empty-actions"></div>
+            <a href="{{ routes.all_products_collection_url }}" class="cart-container-btn">Continue Shopping</a>
+        </div>
+    {% else %}
+    <form action="{{ routes.cart_url }}" method="post">
+        <table class="cart-tables">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th style="text-align: right;">Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart.items %}
+                    <tr>
+                        <td>
+                            <div class="cart-product-details">
+                                {% if item.image %}
+                                <img src="{{ item.image | img_url: 'medium' }}" alt="{{ item.title }}" class="cart-product-img" />
+                                {% endif %}
+                                <div>
+                                    <div class="cart-product-title">{{ item.product.title }}</div>
+                                    {% if item.variant.title != 'Default Title' %}
+                                        <div class="cart-product-variant">{{ item.variant.title }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+                        <td class="cart-product-price">{{ item.price | money }}</td>
+                        <td class="cart-product-qty">{{ item.quantity }}</td>
+                        <td class="cart-product-total" style="text-align: right;">{{ item.line_price | money }}</td>
+                        <td>
+                            <button type="submit" name="updates[]" value="0" class="cart-remove-btn" title="Remove">Remove</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr class="cart-total-row">
+                    <td colspan="3" style="text-align: right;">Subtotal:</td>
+                    <td style="text-align: right;">{{ cart.total_price | money }}</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="/checkout" class="cart-checkout-btn">Checkout</a>
+    </form>
+    {% endif %}
+</div>
+
+<style>
+.cart-page {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 32px 24px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 18px;
+    box-shadow: 0 6px 32px rgba(40, 40, 40, 0.08);
+    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+}
+.cart-title {
+    text-align: center;
+    font-size: 2.3rem;
+    margin-bottom: 2rem;
+    font-weight: 700;
+    color: #22223b;
+    letter-spacing: 1px;
+}
+.cart-empty-message {
+    text-align: center;
+    font-size: 1.15rem;
+    color: #7c7c7c;
+    margin-bottom: 2rem;
+}
+.cart-empty-actions {
+    text-align: center;
+    margin-top: 2rem;
+}
+.cart-container-btn {
+    display: inline-block;
+    padding: 0.8rem 2.2rem;
+    background: linear-gradient(90deg, #22223b 60%, #4a4e69 100%);
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    box-shadow: 0 2px 8px rgba(34,34,59,0.08);
+    transition: background 0.2s, box-shadow 0.2s;
+}
+.cart-container-btn:hover {
+    background: linear-gradient(90deg, #4a4e69 60%, #22223b 100%);
+    box-shadow: 0 4px 16px rgba(34,34,59,0.12);
+}
+.cart-tables {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 2rem;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(40,40,40,0.04);
+}
+.cart-tables th, .cart-tables td {
+    padding: 1.1rem 0.8rem;
+    border-bottom: 1px solid #eaeaea;
+    text-align: left;
+    vertical-align: middle;
+}
+.cart-tables th {
+    background: #f7f7fa;
+    font-weight: 600;
+    color: #22223b;
+    font-size: 1.05rem;
+}
+.cart-product-img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-right: 1.2rem;
+    box-shadow: 0 2px 8px rgba(34,34,59,0.07);
+    border: 1px solid #eaeaea;
+}
+.cart-product-details {
+    display: flex;
+    align-items: center;
+}
+.cart-product-title {
+    font-weight: 600;
+    color: #22223b;
+    font-size: 1.05rem;
+}
+.cart-product-variant {
+    color: #7c7c7c;
+    font-size: 0.95rem;
+    margin-top: 2px;
+}
+.cart-product-price,
+.cart-product-qty,
+.cart-product-total {
+    font-size: 1rem;
+    color: #22223b;
+}
+.cart-remove-btn {
+    background: linear-gradient(90deg, #e74c3c 60%, #c0392b 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.55rem 1.2rem;
+    cursor: pointer;
+    font-size: 0.98rem;
+    font-weight: 500;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(231,76,60,0.08);
+}
+.cart-remove-btn:hover {
+    background: linear-gradient(90deg, #c0392b 60%, #e74c3c 100%);
+    box-shadow: 0 4px 16px rgba(231,76,60,0.12);
+}
+.cart-checkout-btn {
+    display: block;
+    width: 100%;
+    padding: 1.1rem;
+    background: linear-gradient(90deg, #27ae60 60%, #219150 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 2rem;
+    box-shadow: 0 2px 12px rgba(39,174,96,0.08);
+    transition: background 0.2s, box-shadow 0.2s;
+}
+.cart-checkout-btn:hover {
+    background: linear-gradient(90deg, #219150 60%, #27ae60 100%);
+    box-shadow: 0 4px 24px rgba(39,174,96,0.14);
+}
+.cart-total-row td {
+    font-weight: 700;
+    font-size: 1.1rem;
+    background: #f7f7fa;
+    color: #22223b;
+    border-bottom: none;
+}
+@media (max-width: 600px) {
+    .cart-page {
+        padding: 16px 4px;
+    }
+    .cart-tables th, .cart-tables td {
+        padding: 0.7rem 0.4rem;
+        font-size: 0.95rem;
+    }
+    .cart-product-img {
+        width: 48px;
+        height: 48px;
+        margin-right: 0.7rem;
+    }
+    .cart-checkout-btn {
+        font-size: 1.05rem;
+        padding: 0.8rem;
+    }
+}
+</style>
