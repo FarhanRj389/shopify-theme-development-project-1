@@ -1,0 +1,143 @@
+{% stylesheet %}
+.product-page {
+  display: flex;
+  gap: 40px;
+  margin: 40px auto;
+  align-items: flex-start;
+  
+}
+.product-image img {
+  width: 400px;
+height: 400px;
+  object-fit: {{ section.settings.image_fit }};
+  border-radius: 12px;
+}
+
+.product-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.product-title {
+  font-size: {{ section.settings.title_font_size }}px;
+  color: {{ section.settings.title_color }};
+  margin-bottom: 10px;
+}
+
+.product-price {
+  font-size: {{ section.settings.price_font_size }}px;
+  color: {{ section.settings.price_color }};
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.product-description {
+  font-size: {{ section.settings.desc_font_size }}px;
+  color: {{ section.settings.desc_color }};
+  margin-top: 20px;
+  line-height: 1.6;
+}
+
+.add-to-cart-btn {
+  font-size: {{ section.settings.button_font_size }}px;
+  background-color: {{ section.settings.button_bg_color }};
+  color: {{ section.settings.button_text_color }};
+  padding-top: {{ section.settings.button_padding_top }}px;
+  padding-bottom: {{ section.settings.button_padding_bottom }}px;
+  padding-left: {{ section.settings.button_padding_left }}px;
+  padding-right: {{ section.settings.button_padding_right }}px;
+  border-radius: 
+    {{ section.settings.button_radius_top_left }}px
+    {{ section.settings.button_radius_top_right }}px
+    {{ section.settings.button_radius_bottom_right }}px
+    {{ section.settings.button_radius_bottom_left }}px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.add-to-cart-btn:hover {
+  opacity: 0.85;
+}
+@media (max-width: 700px) {
+    .product-page {
+        flex-direction: column;
+        gap: 24px;
+        align-items: center;
+    }
+    .product-image img {
+        width: 100%;
+        height: auto;
+        max-width: 350px;
+    }
+    .product-details {
+        align-items: center;
+        width: 100%;
+        text-align: center;
+    }
+    
+}
+{% endstylesheet %}
+
+<div class="container">
+    <div class="product-page">
+        <div class="product-image">
+            <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title }}">
+        </div>
+
+        <div class="product-details">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'title' %}
+                <h1 class="product-title">{{ product.title }}</h1>
+              {% when 'description' %}
+                <div class="product-description">{{ product.description |  strip_html |  truncatewords }}</div>
+              {% when 'price' %}
+                <div class="product-price">{{ product.price | money }}</div>
+              {% when 'add_to_cart_button' %}
+                {% form 'product', product %}
+                  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                  <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+                {% endform %}
+            {% endcase %}
+          {% endfor %}
+        </div>
+
+    </div>
+</div>
+
+{% schema %}
+{
+  "name": "Main Product",
+  "tag": "section",
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "title",
+      "name": "Title"
+    },
+    {
+      "type": "price",
+      "name": "Price"
+    },
+    {
+      "type": "description",
+      "name": "Description"
+    },
+    {
+      "type": "add_to_cart_button",
+      "name": "Add to Cart Button"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Main Product"
+    }
+  ]
+}
+{% endschema %}
+

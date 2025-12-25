@@ -1,9 +1,9 @@
 <div class="cart-page">
-    <h1 class="cart-title">Your Cart</h1>
+    <h1 class="cart-title">{{ 'cart.title' | t }}</h1>
     {% if cart.item_count == 0 %}
-        <p class="cart-empty-message">Your cart is currently empty</p>
+        <p class="cart-empty-message">{{ 'cart.empty' | t }}</p>
         <div class="cart-empty-actions"></div>
-            <a href="{{ routes.all_products_collection_url }}" class="cart-container-btn">Continue Shopping</a>
+            <a href="{{ routes.all_products_collection_url }}" class="cart-container-btn">{{ 'cart.continue_shopping' | t }}</a>
         </div>
     {% else %}
     <form action="{{ routes.cart_url }}" method="post">
@@ -37,7 +37,7 @@
                         <td class="cart-product-qty">{{ item.quantity }}</td>
                         <td class="cart-product-total" style="text-align: right;">{{ item.line_price | money }}</td>
                         <td>
-                            <button type="submit" name="updates[]" value="0" class="cart-remove-btn" title="Remove">Remove</button>
+                            <a href="{{ item.url_to_remove }}" class="cart-remove-btn" title="Remove">Remove</a>
                         </td>
                     </tr>
                 {% endfor %}

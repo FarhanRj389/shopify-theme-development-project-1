@@ -1,0 +1,7 @@
+{
+    "cart": {
+        "title": "Votre panier",
+        "empty": "Votre panier est  actuellement vide.",
+        "continue_shopping": "Continue Shopping"
+    }
+}

@@ -1,0 +1,240 @@
+<footer class="footer">
+    <div class="footer__container">
+        {% for block in section.blocks %}
+            {% case block.type %}
+                {% when 'logo' %}
+                    <div class="footer__column footer__column--left">
+                        <div class="footer__logo">
+                            {% if shop.brand.logo  %}
+                                <img src="{{ shop.brand.logo | image_url: width: 150  }}" alt="{{ shop.name }}" class="footer__logo-image">
+                            {% else %}
+                                <h3>{{ shop.name }}</h3>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% when 'menu' %}
+                    <div class="footer__column footer__column--center">
+                        <h4 class="footer__heading">{{ block.settings.menu_title }}</h4>
+                        <ul class="footer__menu">
+                            {% for link in linklists[block.settings.menu_links].links %}
+                                <li><a href="{{ link.url }}" class="footer__link">{{ link.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% when 'newsletter' %}
+                    <div class="footer__column footer__column--right">
+                        <h4 class="footer__heading">Newsletter</h4>
+                        <p class="footer__newsletter-text">Subscribe to get special offers and updates.</p>
+                        {% form 'contact' %}
+                            <div class="footer__form">
+                                <input type="email" placeholder="Your email" name="contact[email]" class="footer__input" required aria-label="Email Address">
+                                <button type="submit" class="footer__button">Subscribe</button>
+                            </div>
+                        {% endform %}
+                    </div>
+            {% endcase %}
+        {% endfor %}
+    </div>
+
+    <div class="footer__bottom">
+        <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
+    </div>
+</footer>
+
+{% stylesheet %}
+    .footer {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        color: #ffffff;
+        padding: 50px 20px;
+    }
+
+    .footer__container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 50px;
+    }
+
+    .footer__column {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .footer__logo {
+        margin-bottom: 10px;
+    }
+
+    .footer__logo-image {
+        max-width: 150px;
+        height: auto;
+        display: block;
+        margin-bottom: 15px;
+        transition: transform 0.3s ease;
+    }
+
+    .footer__logo-image:hover {
+        transform: scale(1.05);
+    }
+
+    .footer__logo h3 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 700;
+        color: #d4af37;
+    }
+
+    .footer__heading {
+        margin: 0 0 20px 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #d4af37;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .footer__menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer__menu li {
+        margin-bottom: 12px;
+    }
+
+    .footer__link {
+        color: #cccccc;
+        text-decoration: none;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .footer__link:hover {
+        color: #d4af37;
+        padding-left: 5px;
+    }
+
+    .footer__newsletter-text {
+        font-size: 14px;
+        color: #cccccc;
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+
+    .footer__form {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .footer__input {
+        flex: 1;
+        min-width: 200px;
+        padding: 12px 15px;
+        border: 2px solid #333333;
+        border-radius: 4px;
+        font-size: 14px;
+        background-color: #ffffff;
+        color: #1a1a1a;
+        transition: border-color 0.3s ease;
+    }
+
+    .footer__input:focus {
+        outline: none;
+        border-color: #d4af37;
+    }
+
+    .footer__button {
+        padding: 12px 25px;
+        background-color: #d4af37;
+        color: #1a1a1a;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .footer__button:hover {
+        background-color: #e5c158;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+    }
+
+    .footer__button:active {
+        transform: translateY(0);
+    }
+
+    .footer__bottom {
+        text-align: center;
+        margin-top: 40px;
+        padding-top: 25px;
+        border-top: 1px solid #333333;
+        font-size: 13px;
+        color: #999999;
+    }
+
+    @media (max-width: 768px) {
+        .footer {
+            padding: 40px 20px;
+        }
+
+        .footer__container {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .footer__form {
+            flex-direction: column;
+        }
+
+        .footer__input {
+            min-width: auto;
+        }
+
+        .footer__button {
+            width: 100%;
+        }
+    }
+{% endstylesheet %}
+
+{% schema %}
+{
+    "name": "Footer",
+    "tag": "section",
+    "blocks": [
+        {
+            "type": "logo",
+            "name": "Logo",
+            "settings": []
+        },
+        {
+            "type": "menu",
+            "name": "Footer Menu",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "menu_title",
+                    "label": "Menu Title",
+                    "default": "Quick Links"
+                },
+                {
+                    "type": "link_list",
+                    "id": "menu_links",
+                    "label": "Menu Links"
+                }
+            ]
+        },
+        {
+            "type": "newsletter",
+            "name": "Newsletter Signup",
+            "settings": []
+        }
+    ]
+}
+{% endschema %}
