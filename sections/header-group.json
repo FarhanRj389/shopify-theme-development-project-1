@@ -16,10 +16,14 @@
     "header": {
       "type": "header",
       "settings": {}
+    },
+    "side-cart":{
+      "type": "sidebar",
     }
   },
   "order": [
     "announcement_bar_PCrQM4",
-    "header"
+    "header",
+    "side-cart"
   ]
 }

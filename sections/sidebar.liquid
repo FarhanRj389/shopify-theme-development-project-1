@@ -1,0 +1,161 @@
+<style>
+    sidebar-drawer {
+        --drawer-width: 550px;
+        --animation-duration: 0.4s;
+        --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    sidebar-drawer::part(overlay) {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity var(--animation-duration) var(--animation-easing);
+    }
+
+    sidebar-drawer[open]::part(overlay) {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    sidebar-drawer::part(drawer) {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: var(--drawer-width);
+        height: 100vh;
+        background: white;
+        transform: translateX(100%);
+        transition: transform var(--animation-duration) var(--animation-easing);
+        z-index: 1000;
+        overflow-y: auto;
+        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    sidebar-drawer[open]::part(drawer) {
+        transform: translateX(0);
+    }
+</style>
+
+<script>
+    class SidebarDrawer extends HTMLElement {
+        constructor() {
+            super();
+            this.attachShadow({ mode: 'open' });
+        }
+
+        connectedCallback() {
+            this.render();
+            this.setupListeners();
+        }
+
+        render() {
+            this.shadowRoot.innerHTML = `
+                <style>
+                    :host {
+                        --drawer-width: 550px;
+                        --animation-duration: 0.4s;
+                        --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+                    }
+                    .overlay {
+                        position: fixed;
+                        inset: 0;
+                        background: rgba(0, 0, 0, 0.5);
+                        opacity: 0;
+                        pointer-events: none;
+                        transition: opacity var(--animation-duration) var(--animation-easing);
+                        z-index: 999;
+                    }
+                    :host([open]) .overlay {
+                        opacity: 1;
+                        pointer-events: auto;
+                    }
+                    .drawer {
+                        position: fixed;
+                        top: 0;
+                        right: 0;
+                        width: var(--drawer-width);
+                        height: 100vh;
+                        background: white;
+                        transform: translateX(100%);
+                        transition: transform var(--animation-duration) var(--animation-easing);
+                        z-index: 1000;
+                        overflow-y: auto;
+                        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+                    }
+                    :host([open]) .drawer {
+                        transform: translateX(0);
+                    }
+                </style>
+                <div class="overlay"></div>
+                <div class="drawer">
+                    <slot></slot>
+                </div>
+            `;
+        }
+
+        setupListeners() {
+            this.shadowRoot.querySelector('.overlay').addEventListener('click', () => {
+                this.close();
+            });
+        }
+
+        open() {
+            this.setAttribute('open', '');
+        }
+
+        close() {
+            this.removeAttribute('open');
+        }
+
+        toggle() {
+            this.hasAttribute('open') ? this.close() : this.open();
+        }
+    }
+
+    customElements.define('sidebar-drawer', SidebarDrawer);
+</script>
+
+<sidebar-drawer id="sidebar">
+    <h2>Sidebar Content</h2>
+    <p>Add your content here</p>
+</sidebar-drawer>
+
+<button onclick="document.getElementById('sidebar').toggle()">
+    Toggle Drawer
+</button>
+
+<script>
+    class SidebarDrawer extends HTMLElement {
+        connectedCallback() {
+            this.setupListeners();
+        }
+
+        setupListeners() {
+            this.querySelector('.overlay')?.addEventListener('click', () => {
+                this.close();
+            });
+        }
+
+        open() {
+            this.setAttribute('open', '');
+        }
+
+        close() {
+            this.removeAttribute('open');
+        }
+
+        toggle() {
+            this.hasAttribute('open') ? this.close() : this.open();
+        }
+    }
+
+    customElements.define('sidebar-drawer', SidebarDrawer);
+</script>
+
+{% schema %}
+{
+    "name": "Sidebar"
+}
+{% endschema %}

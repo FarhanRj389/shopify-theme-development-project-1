@@ -1,0 +1,93 @@
+<a
+    href="{{ block.settings.button_link }}"
+    class="button"
+    style="
+        background-color: {{ block.settings.button_background_color }};
+        color: {{ block.settings.button_text_color }};
+        padding: {{ block.settings.button_padding }}px;
+        border-radius: {{ block.settings.button_border_radius }}px;
+        font-size: {{ block.settings.button_font_size }}px;
+        border: {{ block.settings.button_border_width }}px {{ block.settings.button_border_style }} {{ block.settings.button_border_color }};
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        transition: background 0.3s;
+    "
+></a>
+{% schema %}
+{
+    "name": "Custom Button",
+    "settings": [
+        {
+            "type": "text",
+            "id": "button_text",
+            "label": "Button Text",
+            "default": "Click Me"
+        },
+        {
+            "type": "url",
+            "id": "button_link",
+            "label": "Button Link",
+        },
+        {
+            "type": "color",
+            "id": "button_background_color",
+            "label": "Background Color",
+            "default": "#000000"
+        },
+        {
+            "type": "color",
+            "id": "button_text_color",
+            "label": "Text Color",
+            "default": "#FFFFFF"
+        },
+        {
+            "type": "number",
+            "id": "button_padding",
+            "label": "Padding (px)",
+            "default": 10
+        },
+        {
+            "type": "number",
+            "id": "button_border_radius",
+            "label": "Border Radius (px)",
+            "default": 5
+        },
+        {
+            "type": "number",
+            "id": "button_font_size",
+            "label": "Font Size (px)",
+            "default": 16
+        },
+        {
+            "type": "number",
+            "id": "button_border_width",
+            "label": "Border Width (px)",
+            "default": 1
+        },
+        {
+            "type": "select",
+            "id": "button_border_style",
+            "label": "Border Style",
+            "options": [
+                { "value": "solid", "label": "Solid" },
+                { "value": "dashed", "label": "Dashed" },
+                { "value": "dotted", "label": "Dotted" }
+            ],
+            "default": "solid"
+        },
+        {
+            "type": "color",
+            "id": "button_border_color",
+            "label": "Border Color",
+            "default": "#000000"
+        }
+    ],
+    "presets": [
+        {
+            "name": "Custom Button",
+            "category": "Custom"
+        }
+    ]
+}
+{% endschema %}

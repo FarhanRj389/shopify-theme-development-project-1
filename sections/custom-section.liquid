@@ -1,0 +1,31 @@
+{% stylesheet %}
+    .flex-section{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+    .flex-section >.shopify-block{
+        flex 1;
+    }
+{% endstylesheet %}
+
+<section class="container flex-section">
+    {% content_for 'blocks' %}
+</section>
+
+{% schema %}
+{
+    "name": "Custom Section",
+    "blocks": [
+            {
+                "type": "@theme"
+            }
+        ],
+    "presets": [
+        {
+            "name": "Custom Section"
+        }
+    ]
+}
+{% endschema %}
