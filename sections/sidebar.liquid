@@ -1,158 +1,129 @@
 <style>
-    sidebar-drawer {
-        --drawer-width: 550px;
-        --animation-duration: 0.4s;
-        --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    sidebar-drawer::part(overlay) {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.5);
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity var(--animation-duration) var(--animation-easing);
-    }
-
-    sidebar-drawer[open]::part(overlay) {
-        opacity: 1;
-        pointer-events: auto;
-    }
-
-    sidebar-drawer::part(drawer) {
+    .sidebar-drawer-wrapper{
         position: fixed;
         top: 0;
         right: 0;
-        width: var(--drawer-width);
         height: 100vh;
-        background: white;
-        transform: translateX(100%);
-        transition: transform var(--animation-duration) var(--animation-easing);
-        z-index: 1000;
-        overflow-y: auto;
-        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+        width: 100vw;
+        z-index: 10000;
+        pointer-events: none;
     }
-
-    sidebar-drawer[open]::part(drawer) {
+    .sidebar-drawer-wrapper.open{
+        pointer-events: auto;
+    }
+    .sidebar-drawer-backdrop{
+        position: absolute;
+        inset: 0;
+        background-color: rgba(0,0,0,0.5);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+    .sidebar-drawer-wrapper.open .sidebar-drawer-backdrop{
+        opacity: 1;
+        pointer-events: auto;
+    }
+    .sidebar-drawer{
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 400px;
+        max-width: 100vw;
+        height: 100vh;
+        background: #FFF;
+        box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+        transform: translateX(100%);
+        transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+        will-change: transform;
+        display: flex;
+        flex-direction: column;
+    }
+    .sidebar-drawer-wrapper.open .sidebar-drawer{
         transform: translateX(0);
+    }
+    #close-sidebar-btn {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        color: #333;
+        z-index: 2;
+    }
+    #close-sidebar-btn:hover {
+        color: #000;
+    }
+    .cart-footer {
+        margin-top: auto;
+        padding: 20px;
+        border-top: 1px solid #e0e0e0;
+    }
+    .cart-total {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .checkout-button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background: #000;
+        color: #fff;
+        text-align: center;
+        text-decoration: none;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .checkout-button:hover {
+        background: #333;
+    }
+    .empty-cart-message {
+        padding: 20px;
+        text-align: center;
+        color: #666;
     }
 </style>
 
-<script>
-    class SidebarDrawer extends HTMLElement {
-        constructor() {
-            super();
-            this.attachShadow({ mode: 'open' });
-        }
+<sidebar-drawer id="sidebarDrawer" class="sidebar-drawer-wrapper">
+    <div class="sidebar-drawer-backdrop" id="close-sidebar"></div>
+    <div class="sidebar-drawer">
+        <side-cart>
+            <template id="side-cart-item">
+                {% render 'side-cart-item', liquid: false %}
+            </template>
 
-        connectedCallback() {
-            this.render();
-            this.setupListeners();
-        }
-
-        render() {
-            this.shadowRoot.innerHTML = `
-                <style>
-                    :host {
-                        --drawer-width: 550px;
-                        --animation-duration: 0.4s;
-                        --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
-                    }
-                    .overlay {
-                        position: fixed;
-                        inset: 0;
-                        background: rgba(0, 0, 0, 0.5);
-                        opacity: 0;
-                        pointer-events: none;
-                        transition: opacity var(--animation-duration) var(--animation-easing);
-                        z-index: 999;
-                    }
-                    :host([open]) .overlay {
-                        opacity: 1;
-                        pointer-events: auto;
-                    }
-                    .drawer {
-                        position: fixed;
-                        top: 0;
-                        right: 0;
-                        width: var(--drawer-width);
-                        height: 100vh;
-                        background: white;
-                        transform: translateX(100%);
-                        transition: transform var(--animation-duration) var(--animation-easing);
-                        z-index: 1000;
-                        overflow-y: auto;
-                        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
-                    }
-                    :host([open]) .drawer {
-                        transform: translateX(0);
-                    }
-                </style>
-                <div class="overlay"></div>
-                <div class="drawer">
-                    <slot></slot>
+            <button id="close-sidebar-btn" class="sidebar-close-btn" aria-label="Close sidebar">&times;</button>
+            <div style="padding: 2rem; padding-top: 3.5rem; flex-grow: 1; display: flex; flex-direction: column;">   
+                <h2 style="margin-bottom: 20px;">{{ 'cart.title' | t }}</h2>
+                <div id="cart-items" class="cart-items" style="flex-grow: 1; overflow-y: auto;">
+                    {% if cart.item_count > 0 %}
+                        {% for item in cart.items %}
+                            {% render 'side-cart-item', item: item, liquid: true, key: item.key %}
+                        {% endfor %}
+                    {% else %}
+                        <p class="empty-cart-message">Your cart is empty</p>
+                    {% endif %}
                 </div>
-            `;
-        }
-
-        setupListeners() {
-            this.shadowRoot.querySelector('.overlay').addEventListener('click', () => {
-                this.close();
-            });
-        }
-
-        open() {
-            this.setAttribute('open', '');
-        }
-
-        close() {
-            this.removeAttribute('open');
-        }
-
-        toggle() {
-            this.hasAttribute('open') ? this.close() : this.open();
-        }
-    }
-
-    customElements.define('sidebar-drawer', SidebarDrawer);
-</script>
-
-<sidebar-drawer id="sidebar">
-    <h2>Sidebar Content</h2>
-    <p>Add your content here</p>
+                
+                {% if cart.item_count > 0 %}
+                <div class="cart-footer">
+                    <div id="cart-total" class="cart-total">
+                        <span>Total:</span>
+                        <span>{{ cart.total_price | money }}</span>
+                    </div>
+                    <a href="/checkout" class="checkout-button">Checkout</a>
+                </div>
+                {% endif %}
+            </div>
+        </side-cart>
+    </div>
 </sidebar-drawer>
-
-<button onclick="document.getElementById('sidebar').toggle()">
-    Toggle Drawer
-</button>
-
-<script>
-    class SidebarDrawer extends HTMLElement {
-        connectedCallback() {
-            this.setupListeners();
-        }
-
-        setupListeners() {
-            this.querySelector('.overlay')?.addEventListener('click', () => {
-                this.close();
-            });
-        }
-
-        open() {
-            this.setAttribute('open', '');
-        }
-
-        close() {
-            this.removeAttribute('open');
-        }
-
-        toggle() {
-            this.hasAttribute('open') ? this.close() : this.open();
-        }
-    }
-
-    customElements.define('sidebar-drawer', SidebarDrawer);
-</script>
 
 {% schema %}
 {

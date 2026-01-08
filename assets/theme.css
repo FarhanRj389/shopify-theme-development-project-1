@@ -19,9 +19,9 @@ h1, h2, h3, h4, h5, h6{
 .button{
     display: inline-block;
     padding: 0.75em 1.5em;
-    background-color: #222;
-    color: #fff;
-    border: none;
+    background-color: transparent;
+    color: #fa7373;
+    border: 1px solid #fc8181;
     border-radius: 4px;
     font-size: 1rem;
     font-family: inherit;
@@ -32,8 +32,54 @@ h1, h2, h3, h4, h5, h6{
     transition: background  0.3s, color 0.3s, box-shadow 0.3s;
 }
 .button:hover, .button:focus{
-    background-color: #555;
-    color: #fff;
+    background-color: #fdc6c6;
+    color: #ff7979;
     box-shadow: 0 4px 8px rgba(0,0,0,0.10); 
     outline: none;
+}
+
+/* Cart Notifications */
+.cart-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 4px;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: slideUp 0.3s ease-out;
+    font-size: 14px;
+}
+
+/* Product Form Messages */
+.product-form__message {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    text-align: center;
+    color: #333;
+    font-size: 14px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Animations */
+@keyframes slideUp {
+    from { 
+        transform: translate(-50%, 20px); 
+        opacity: 0; 
+    }
+    to { 
+        transform: translate(-50%, 0); 
+        opacity: 1; 
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }

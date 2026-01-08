@@ -1,0 +1,169 @@
+{% liquid 
+    if liquid
+        assign key = item.key
+        assign url = item.url
+        assign image_url = item.image | img_url: 'medium'
+        assign title = item.product.title
+        if item.variant.title != 'Default Title'
+            assign variant_title = item.variant.title
+        endif
+        assign price = item.price | money 
+        assign quantity = item.quantity
+     
+    else 
+        assign image_url = '$$IMAGE_URL$$'
+        assign title = '$$ITEM_TITLE$$'
+        assign variant_title = '$$ITEM_VARIANT_TITLE$$'
+        assign price = '$$ITEM_PRICE$$'
+        assign quantity = '$$ITEM_QUANTITY$$'
+    endif
+%}
+
+<side-cart-item class="side-cart-item" id="side-cart-item-{{ key }}" variant-id="{{ item.variant.id }}" item-count="{{ item.quantity }}">
+    <div class="side-cart-item__image">
+        <img src="{{ image_url }}" alt="{{ title }}" width="80" height="80">
+    </div>
+    
+    <div class="side-cart-item__details">
+        <div href="{{ url }}" class="side-cart-item__title">{{ title }}</div>
+        <div class="side-cart-item__variant">{{ variant_title }}</div>
+        <div class="side-cart-item__price">
+            {{ price }}
+            {% comment %} <span class="side-cart-item__price--compare">{{ original_line_price }}</span> {% endcomment %}
+        </div>
+        <div class="side-cart-item__quantity">
+    <button class="side-cart-item__qty-btn" type="button" data-action="decrease" data-key="{{ key }}">-</button>
+    <input type="number" min="1" value="{{ quantity }}" data-key="{{ key }}" class="side-cart-item_qty-input" readonly>
+    <button class="side-cart-item__qty-btn" type="button" data-action="increase" data-key="{{ key }}">+</button>
+</div>
+    </div>
+
+    <button class="cart-item-delete" type="button" data-key="{{ key }}" aria-label="Remove item">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 2h4M3 4h10M5 6v6M8 6v6M11 6v6M4 4v10a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+</button>
+
+</side-cart-item>
+
+<style>
+    .side-cart-item_qty-input {
+                width: 36px;
+                height: 24px;
+                text-align: center;
+                border: 1px solid #ddd;
+                border-radius: 3px;
+                font-size: 14px;
+                margin: 0 2px;
+            }
+.side-cart-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    position: relative;
+    background: #fff;
+}
+
+.side-cart-item__image {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+    border-radius: 4px;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.side-cart-item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.side-cart-item__details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.side-cart-item__title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
+    text-decoration: none;
+    margin-bottom: 2px;
+    line-height: 1.3;
+}
+
+.side-cart-item__variant {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 2px;
+}
+
+.side-cart-item__price {
+    font-size: 13px;
+    color: #222;
+    margin-bottom: 4px;
+}
+
+.side-cart-item__price--compare {
+    font-size: 12px;
+    color: #aaa;
+    text-decoration: line-through;
+    margin-left: 6px;
+}
+
+.side-cart-item__quantity {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.side-cart-item__qty-btn {
+    width: 24px;
+    height: 24px;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.side-cart-item_qty-btn {
+    width: 36px;
+    height: 24px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 14px;
+    margin: 0 2px;
+}
+
+.side-cart-item__remove {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.side-cart-item__remove:hover {
+    color: #333;
+}
+</style>
